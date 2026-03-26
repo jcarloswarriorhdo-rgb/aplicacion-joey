@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import { Joey } from "./Joey";
@@ -31,6 +31,15 @@ function burst() {
   setTimeout(() => confetti({ ...opts, particleCount: 120, origin: { x:0.5, y:0.3 } }), 900);
 }
 
+function shuffleOptions<T>(arr: T[], seed: number): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = (seed * (i + 7) * 2654435761) % (i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 export function MultipleChoiceGame({ title, emoji, bgFrom, bgTo, questions, backHref }: Props) {
   const [idx, setIdx]       = useState(0);
   const [score, setScore]   = useState(0);
@@ -39,6 +48,11 @@ export function MultipleChoiceGame({ title, emoji, bgFrom, bgTo, questions, back
   const [mood, setMood]     = useState<Mood>("happy");
   const [msgIdx, setMsgIdx] = useState(0);
   const [playerName, setPlayerName] = useState("");
+
+  // Mezcla las opciones de cada pregunta una sola vez (seed distinto por pregunta)
+  const shuffledQuestions = useMemo(() =>
+    questions.map((q, i) => ({ ...q, options: shuffleOptions(q.options, i + 1) })),
+  [questions]);
 
   useEffect(() => {
     setPlayerName(localStorage.getItem("joeyPlayerName") || "Campeón");
@@ -51,9 +65,9 @@ export function MultipleChoiceGame({ title, emoji, bgFrom, bgTo, questions, back
     }
   }, [state]);
 
-  const q        = questions[idx];
-  const progress = (idx / questions.length) * 100;
-  const pct      = Math.round((score / questions.length) * 100);
+  const q        = shuffledQuestions[idx];
+  const progress = (idx / shuffledQuestions.length) * 100;
+  const pct      = Math.round((score / shuffledQuestions.length) * 100);
 
   function handleAnswer(i: number) {
     if (state !== "playing") return;
@@ -71,7 +85,7 @@ export function MultipleChoiceGame({ title, emoji, bgFrom, bgTo, questions, back
       playWrong();
     }
     setTimeout(() => {
-      if (idx + 1 >= questions.length) {
+      if (idx + 1 >= shuffledQuestions.length) {
         setState("complete");
       } else {
         setIdx(n => n + 1);

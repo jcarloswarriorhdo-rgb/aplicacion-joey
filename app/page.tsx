@@ -207,7 +207,7 @@ export default function HomePage() {
                 onKeyDown={e => e.key === "Enter" && submitName()}
                 placeholder="Escribe tu nombre..."
                 className="w-full text-center text-2xl font-black rounded-2xl px-4 py-4 shadow-xl outline-none border-4"
-                style={{ borderColor:"#a855f7", color:"#374151" }}
+                style={{ borderColor:"#a855f7", color:"#1e1040", background:"rgba(255,255,255,0.95)" }}
                 autoFocus
               />
               <button onClick={submitName}

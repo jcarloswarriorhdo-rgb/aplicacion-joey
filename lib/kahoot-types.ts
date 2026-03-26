@@ -1,4 +1,4 @@
-export const ANSWER_COLORS = ['#e21b3c', '#1368ce', '#d89e00', '#26890c'] as const;
+export const ANSWER_COLORS = ['#ff4757', '#5352ed', '#ffa502', '#2ed573'] as const;
 export const ANSWER_SHAPES = ['▲', '◆', '●', '■'] as const;
 export const ANSWER_LABELS = ['A', 'B', 'C', 'D'] as const;
 
