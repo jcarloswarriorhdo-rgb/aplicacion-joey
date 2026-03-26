@@ -8,7 +8,7 @@ import { Joey } from "@/components/Joey";
 import type { KahootGame } from "@/lib/kahoot-types";
 import { ANSWER_COLORS, ANSWER_SHAPES, ANSWER_LABELS } from "@/lib/kahoot-types";
 
-const BG = "linear-gradient(160deg,#46178f 0%,#7c3aed 100%)";
+const BG = "linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0fdf4 100%)";
 
 function burst() {
   confetti({ particleCount: 120, spread: 100, origin: { y: 0.5 },
@@ -76,9 +76,9 @@ export default function JugarPage({ params }: { params: Promise<{ gameId: string
   if (!playerName) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6" style={{ background: BG }}>
-        <p className="text-white font-black text-xl text-center">Sesión no encontrada.</p>
+        <p className="font-black text-xl text-center" style={{color:"#0d1b3e"}}>Sesión no encontrada.</p>
         <button onClick={() => router.push("/kahoot/unirse")}
-          className="mt-4 text-white/60 underline font-bold bg-transparent border-none cursor-pointer">
+          className="mt-4 text-gray-400 underline font-bold bg-transparent border-none cursor-pointer">
           Volver a unirse
         </button>
       </div>
@@ -88,7 +88,7 @@ export default function JugarPage({ params }: { params: Promise<{ gameId: string
   if (!game) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: BG }}>
-        <p className="text-white font-black text-2xl animate-pulse">Conectando...</p>
+        <p className="font-black text-2xl animate-pulse" style={{color:"#0d1b3e"}}>Conectando...</p>
       </div>
     );
   }
@@ -105,11 +105,11 @@ export default function JugarPage({ params }: { params: Promise<{ gameId: string
         <motion.div animate={{ y: [0, -12, 0] }} transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}>
           <Joey mood="happy" size={140} />
         </motion.div>
-        <h1 className="text-white font-black text-4xl mt-4">¡Listo, {playerName}!</h1>
-        <p className="text-white/70 font-bold mt-2 text-xl">Esperando que el maestro inicie...</p>
+        <h1 className="font-black text-4xl mt-4" style={{color:"#0d1b3e"}}>¡Listo, {playerName}!</h1>
+        <p className="text-gray-500 font-bold mt-2 text-xl">Esperando que el maestro inicie...</p>
         <div className="mt-6 flex gap-1 justify-center">
           {[0, 1, 2].map(i => (
-            <motion.div key={i} className="w-3 h-3 rounded-full bg-white"
+            <motion.div key={i} className="w-3 h-3 rounded-full bg-gray-400"
               animate={{ opacity: [0.3, 1, 0.3] }}
               transition={{ duration: 1, repeat: Infinity, delay: i * 0.3 }} />
           ))}
@@ -130,23 +130,24 @@ export default function JugarPage({ params }: { params: Promise<{ gameId: string
           transition={{ duration: 0.8, delay: 0.2 }}>
           <Joey mood="excited" size={140} />
         </motion.div>
-        <h1 className="text-white font-black text-4xl mt-4">¡Fin del juego!</h1>
-        <div className="mt-4 bg-white/15 rounded-3xl px-8 py-5">
-          <p className="text-white/70 font-bold">Tu posición</p>
-          <p className="text-white font-black text-6xl">{myRank <= 3 ? medals[myRank - 1] : `#${myRank}`}</p>
-          <p className="text-white font-black text-3xl mt-1">{myPlayer?.score ?? 0} pts</p>
+        <h1 className="font-black text-4xl mt-4" style={{color:"#0d1b3e"}}>¡Fin del juego!</h1>
+        <div className="mt-4 bg-white rounded-3xl px-8 py-5 shadow-lg">
+          <p className="text-gray-500 font-bold">Tu posición</p>
+          <p className="font-black text-6xl" style={{color:"#0d1b3e"}}>{myRank <= 3 ? medals[myRank - 1] : `#${myRank}`}</p>
+          <p className="font-black text-3xl mt-1" style={{color:"#0d1b3e"}}>{myPlayer?.score ?? 0} pts</p>
         </div>
         <div className="mt-6 flex flex-col gap-2 w-full max-w-xs">
           {sorted.slice(0, 5).map(([name, p], i) => (
-            <div key={name} className="flex items-center gap-3 bg-white/10 rounded-xl px-4 py-2">
-              <span className="text-white font-black w-6">{i < 3 ? medals[i] : i + 1}</span>
-              <span className={`font-black flex-1 text-left ${name === playerName ? "text-yellow-300" : "text-white"}`}>{name}</span>
-              <span className="text-white/80 font-bold">{p.score}</span>
+            <div key={name} className="flex items-center gap-3 bg-white rounded-xl px-4 py-2 shadow-sm">
+              <span className="font-black w-6" style={{color:"#0d1b3e"}}>{i < 3 ? medals[i] : i + 1}</span>
+              <span className={`font-black flex-1 text-left ${name === playerName ? "text-blue-600" : ""}`}
+                style={name !== playerName ? {color:"#0d1b3e"} : undefined}>{name}</span>
+              <span className="text-gray-500 font-bold">{p.score}</span>
             </div>
           ))}
         </div>
         <button onClick={() => router.push("/kahoot")}
-          className="mt-6 text-white/50 font-bold underline bg-transparent border-none cursor-pointer text-sm">
+          className="mt-6 text-gray-400 font-bold underline bg-transparent border-none cursor-pointer text-sm">
           Volver al inicio
         </button>
       </div>
@@ -178,30 +179,31 @@ export default function JugarPage({ params }: { params: Promise<{ gameId: string
                 )}
               </div>
             ) : (
-              <div className="w-full rounded-3xl px-6 py-5 bg-white/20">
-                <p className="text-white font-black text-2xl">⏱ Sin respuesta</p>
+              <div className="w-full rounded-3xl px-6 py-5 bg-gray-200">
+                <p className="font-black text-2xl" style={{color:"#0d1b3e"}}>⏱ Sin respuesta</p>
               </div>
             )}
 
             {/* Mi posición */}
-            <div className="bg-white/15 rounded-2xl px-6 py-4 w-full">
-              <p className="text-white/70 font-bold text-sm">Tu posición</p>
-              <p className="text-white font-black text-4xl">#{myRank}</p>
-              <p className="text-white/80 font-bold">{myPlayer?.score ?? 0} puntos</p>
+            <div className="bg-white rounded-2xl px-6 py-4 w-full shadow-md">
+              <p className="text-gray-500 font-bold text-sm">Tu posición</p>
+              <p className="font-black text-4xl" style={{color:"#0d1b3e"}}>#{myRank}</p>
+              <p className="text-gray-500 font-bold">{myPlayer?.score ?? 0} puntos</p>
             </div>
 
             {/* Top 3 */}
             <div className="flex flex-col gap-2 w-full">
               {sorted.slice(0, 3).map(([name, p], i) => (
-                <div key={name} className="flex items-center gap-3 bg-white/10 rounded-xl px-4 py-2">
+                <div key={name} className="flex items-center gap-3 bg-white rounded-xl px-4 py-2 shadow-sm">
                   <span className="text-lg">{["🥇", "🥈", "🥉"][i]}</span>
-                  <span className={`font-black flex-1 text-left text-sm ${name === playerName ? "text-yellow-300" : "text-white"}`}>{name}</span>
-                  <span className="text-white/80 font-bold text-sm">{p.score}</span>
+                  <span className={`font-black flex-1 text-left text-sm ${name === playerName ? "text-blue-600" : ""}`}
+                    style={name !== playerName ? {color:"#0d1b3e"} : undefined}>{name}</span>
+                  <span className="text-gray-500 font-bold text-sm">{p.score}</span>
                 </div>
               ))}
             </div>
 
-            <p className="text-white/50 font-bold text-sm animate-pulse">
+            <p className="text-gray-400 font-bold text-sm animate-pulse">
               Esperando siguiente pregunta...
             </p>
           </motion.div>
@@ -214,16 +216,16 @@ export default function JugarPage({ params }: { params: Promise<{ gameId: string
   return (
     <div className="min-h-screen flex flex-col" style={{ background: BG }}>
       {/* Timer bar */}
-      <div className="h-3 bg-white/20">
+      <div className="h-3 bg-gray-200">
         <motion.div className="h-full rounded-r-full"
           style={{ background: timerPct > 30 ? "#26890c" : timerPct > 10 ? "#d89e00" : "#e21b3c" }}
           animate={{ width: `${timerPct}%` }} transition={{ duration: 0.1 }} />
       </div>
 
       <div className="flex items-center justify-between px-4 py-2">
-        <span className="text-white font-black">{Math.ceil(timer)}s</span>
-        <span className="text-white/60 text-sm font-bold">{game.currentQuestion + 1}/{game.questions.length}</span>
-        <span className="text-white font-black text-sm">⭐ {myPlayer?.score ?? 0}</span>
+        <span className="font-black" style={{color:"#0d1b3e"}}>{Math.ceil(timer)}s</span>
+        <span className="text-gray-500 text-sm font-bold">{game.currentQuestion + 1}/{game.questions.length}</span>
+        <span className="font-black text-sm" style={{color:"#0d1b3e"}}>⭐ {myPlayer?.score ?? 0}</span>
       </div>
 
       {/* Pregunta */}
@@ -236,8 +238,8 @@ export default function JugarPage({ params }: { params: Promise<{ gameId: string
             {q.image && (
               <img src={q.image} alt="" className="max-h-32 rounded-2xl object-cover shadow-xl w-full" />
             )}
-            <div className="bg-white/15 rounded-3xl px-5 py-4 w-full text-center">
-              <p className="text-white font-black text-xl leading-snug">{q.text}</p>
+            <div className="bg-white rounded-3xl px-5 py-4 w-full text-center shadow-md">
+              <p className="font-black text-xl leading-snug" style={{color:"#0d1b3e"}}>{q.text}</p>
             </div>
           </motion.div>
         </AnimatePresence>

@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { KahootGame } from "@/lib/kahoot-types";
 import { ANSWER_COLORS, ANSWER_SHAPES } from "@/lib/kahoot-types";
 
-const BG = "linear-gradient(160deg,#46178f 0%,#7c3aed 100%)";
+const BG = "linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0fdf4 100%)";
 
 export default function HostPage({ params }: { params: Promise<{ gameId: string }> }) {
   const { gameId } = use(params);
@@ -63,7 +63,7 @@ export default function HostPage({ params }: { params: Promise<{ gameId: string 
   if (!game) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: BG }}>
-        <p className="text-white font-black text-2xl animate-pulse">Cargando...</p>
+        <p className="font-black text-2xl animate-pulse" style={{color:"#0d1b3e"}}>Cargando...</p>
       </div>
     );
   }
@@ -79,19 +79,19 @@ export default function HostPage({ params }: { params: Promise<{ gameId: string 
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center" style={{ background: BG }}>
         <div className="w-full max-w-md flex flex-col gap-6">
-          <h1 className="text-white font-black text-2xl">¡Sala de espera!</h1>
+          <h1 className="font-black text-2xl" style={{color:"#0d1b3e"}}>¡Sala de espera!</h1>
 
           {/* PIN grande */}
           <div className="bg-white rounded-3xl px-8 py-6 shadow-2xl">
             <p className="text-gray-500 font-bold text-sm uppercase tracking-widest mb-1">PIN del juego</p>
-            <p className="font-black text-6xl tracking-[0.15em]" style={{ color: "#46178f" }}>{game.pin}</p>
+            <p className="font-black text-6xl tracking-[0.15em]" style={{ color: "#0d1b3e" }}>{game.pin}</p>
             <p className="text-gray-400 text-sm mt-2 font-bold">Entra en esta app → Unirse a un juego</p>
           </div>
 
           {/* Lista de jugadores */}
-          <div className="bg-white/10 rounded-2xl p-4 min-h-[80px]">
+          <div className="bg-white/60 rounded-2xl p-4 min-h-[80px]">
             {playerList.length === 0 ? (
-              <p className="text-white/50 font-bold text-center py-4">Esperando jugadores...</p>
+              <p className="text-gray-400 font-bold text-center py-4">Esperando jugadores...</p>
             ) : (
               <div className="flex flex-wrap gap-2 justify-center">
                 <AnimatePresence>
@@ -107,18 +107,18 @@ export default function HostPage({ params }: { params: Promise<{ gameId: string 
             )}
           </div>
 
-          <p className="text-white/60 font-bold">{totalPlayers} jugador{totalPlayers !== 1 ? "es" : ""} conectado{totalPlayers !== 1 ? "s" : ""}</p>
+          <p className="text-gray-500 font-bold">{totalPlayers} jugador{totalPlayers !== 1 ? "es" : ""} conectado{totalPlayers !== 1 ? "s" : ""}</p>
 
           <motion.button whileTap={{ scale: 0.97 }}
             onClick={iniciar}
             disabled={totalPlayers === 0}
             className="w-full py-5 rounded-2xl font-black text-xl text-white shadow-2xl cursor-pointer"
-            style={{ background: totalPlayers > 0 ? "#e21b3c" : "rgba(255,255,255,0.2)" }}>
+            style={{ background: totalPlayers > 0 ? "#ff4d6d" : "rgba(0,0,0,0.15)" }}>
             {totalPlayers > 0 ? "🚀 ¡Iniciar Kahoot!" : "Esperando jugadores..."}
           </motion.button>
 
           <button onClick={() => router.push("/kahoot")}
-            className="text-white/40 text-sm font-bold underline bg-transparent border-none cursor-pointer">
+            className="text-gray-400 text-sm font-bold underline bg-transparent border-none cursor-pointer">
             Cancelar juego
           </button>
         </div>
@@ -133,21 +133,21 @@ export default function HostPage({ params }: { params: Promise<{ gameId: string 
       <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center" style={{ background: BG }}>
         <div className="w-full max-w-md flex flex-col gap-6">
           <div className="text-7xl animate-bounce">🏆</div>
-          <h1 className="text-white font-black text-4xl">¡Fin del juego!</h1>
+          <h1 className="font-black text-4xl" style={{color:"#0d1b3e"}}>¡Fin del juego!</h1>
           <div className="flex flex-col gap-3">
             {podium.map(([name, player], i) => (
               <motion.div key={name} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.15 }}
-                className="flex items-center gap-4 bg-white/15 rounded-2xl px-5 py-4">
+                className="flex items-center gap-4 bg-white rounded-2xl px-5 py-4 shadow-md">
                 <span className="text-3xl">{["🥇", "🥈", "🥉"][i]}</span>
-                <span className="text-white font-black text-xl flex-1 text-left">{name}</span>
-                <span className="text-white/80 font-black text-lg">{player.score} pts</span>
+                <span className="font-black text-xl flex-1 text-left" style={{color:"#0d1b3e"}}>{name}</span>
+                <span className="text-gray-500 font-black text-lg">{player.score} pts</span>
               </motion.div>
             ))}
           </div>
           <button onClick={() => router.push("/kahoot")}
             className="w-full py-4 rounded-2xl font-black text-lg text-white cursor-pointer"
-            style={{ background: "#e21b3c" }}>
+            style={{ background: "#ff4d6d" }}>
             🏠 Volver al inicio
           </button>
         </div>
@@ -160,16 +160,16 @@ export default function HostPage({ params }: { params: Promise<{ gameId: string 
     return (
       <div className="min-h-screen flex flex-col" style={{ background: BG }}>
         {/* Timer bar */}
-        <div className="h-3 bg-white/20">
+        <div className="h-3 bg-gray-200">
           <motion.div className="h-full rounded-r-full"
             style={{ background: timerPct > 30 ? "#26890c" : timerPct > 10 ? "#d89e00" : "#e21b3c" }}
             animate={{ width: `${timerPct}%` }} transition={{ duration: 0.1 }} />
         </div>
 
         <div className="flex items-center justify-between px-5 py-3">
-          <span className="text-white font-black text-lg">{Math.ceil(timer)}s</span>
-          <span className="text-white/70 font-bold">Pregunta {game.currentQuestion + 1} / {game.questions.length}</span>
-          <span className="text-white font-black">{answeredCount}/{totalPlayers} ✓</span>
+          <span className="font-black text-lg" style={{color:"#0d1b3e"}}>{Math.ceil(timer)}s</span>
+          <span className="text-gray-500 font-bold">Pregunta {game.currentQuestion + 1} / {game.questions.length}</span>
+          <span className="font-black" style={{color:"#0d1b3e"}}>{answeredCount}/{totalPlayers} ✓</span>
         </div>
 
         {/* Pregunta */}
@@ -177,8 +177,8 @@ export default function HostPage({ params }: { params: Promise<{ gameId: string 
           {q.image && (
             <img src={q.image} alt="" className="max-h-36 rounded-2xl object-cover shadow-xl" />
           )}
-          <div className="bg-white/15 rounded-3xl px-6 py-5 w-full max-w-lg text-center">
-            <p className="text-white font-black text-2xl leading-snug">{q.text}</p>
+          <div className="bg-white rounded-3xl px-6 py-5 w-full max-w-lg text-center shadow-md">
+            <p className="font-black text-2xl leading-snug" style={{color:"#0d1b3e"}}>{q.text}</p>
           </div>
 
           {/* Opciones (solo visual para host) */}
@@ -198,7 +198,7 @@ export default function HostPage({ params }: { params: Promise<{ gameId: string 
             onClick={siguiente}
             disabled={advancing}
             className="w-full py-4 rounded-2xl font-black text-lg text-white cursor-pointer"
-            style={{ background: "#e21b3c" }}>
+            style={{ background: "#ff4d6d" }}>
             {advancing ? "..." : "Revelar respuesta →"}
           </motion.button>
         </div>
@@ -210,7 +210,7 @@ export default function HostPage({ params }: { params: Promise<{ gameId: string 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-5" style={{ background: BG }}>
       <div className="w-full max-w-md flex flex-col gap-4">
-        <h2 className="text-white font-black text-3xl text-center">
+        <h2 className="font-black text-3xl text-center" style={{color:"#0d1b3e"}}>
           {game.currentQuestion + 1 < game.questions.length ? "📊 Puntajes" : "🏆 Resultados finales"}
         </h2>
 
@@ -231,16 +231,16 @@ export default function HostPage({ params }: { params: Promise<{ gameId: string 
             return (
               <motion.div key={name} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="flex items-center gap-3 bg-white/10 rounded-xl px-4 py-3">
-                <span className="text-white font-black w-6">{i + 1}</span>
-                <span className="text-white font-black flex-1">{name}</span>
+                className="flex items-center gap-3 bg-white rounded-xl px-4 py-3 shadow-sm">
+                <span className="font-black w-6" style={{color:"#0d1b3e"}}>{i + 1}</span>
+                <span className="font-black flex-1" style={{color:"#0d1b3e"}}>{name}</span>
                 {result && (
                   <span className="text-lg">{result.correct ? "✅" : result.answer === -1 ? "⏱" : "❌"}</span>
                 )}
                 {result?.correct && (
-                  <span className="text-yellow-300 font-black text-sm">+{result.points}</span>
+                  <span className="text-emerald-600 font-black text-sm">+{result.points}</span>
                 )}
-                <span className="text-white font-black">{player.score}</span>
+                <span className="font-black" style={{color:"#0d1b3e"}}>{player.score}</span>
               </motion.div>
             );
           })}
@@ -250,7 +250,7 @@ export default function HostPage({ params }: { params: Promise<{ gameId: string 
           onClick={siguiente}
           disabled={advancing}
           className="w-full py-5 rounded-2xl font-black text-xl text-white cursor-pointer mt-2"
-          style={{ background: "#e21b3c" }}>
+          style={{ background: "#ff4d6d" }}>
           {advancing ? "..." : game.currentQuestion + 1 < game.questions.length
             ? `Siguiente pregunta (${game.currentQuestion + 2}/${game.questions.length}) →`
             : "🏆 Ver resultados finales"}
