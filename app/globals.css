@@ -1,26 +1,48 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+* { box-sizing: border-box; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Nunito', 'Trebuchet MS', system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
 }
+
+@keyframes bounce-joey {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-14px); }
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-6deg); }
+  50% { transform: rotate(6deg); }
+}
+@keyframes pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes star-spin {
+  from { transform: scale(0) rotate(0deg); opacity: 0; }
+  50%  { transform: scale(1.4) rotate(200deg); opacity: 1; }
+  to   { transform: scale(0) rotate(360deg); opacity: 0; }
+}
+
+.animate-bounce-joey { animation: bounce-joey 1.4s ease-in-out infinite; }
+.animate-wiggle      { animation: wiggle 0.4s ease-in-out 3; }
+.animate-pop         { animation: pop 0.35s ease-out; }
+.animate-fade-up     { animation: fade-up 0.4s ease-out; }
+
+.btn-option {
+  transition: transform 0.12s, box-shadow 0.12s;
+  cursor: pointer;
+  user-select: none;
+}
+.btn-option:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.22);
+}
+.btn-option:active:not(:disabled) { transform: translateY(0px); }
