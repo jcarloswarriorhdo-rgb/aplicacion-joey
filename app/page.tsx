@@ -75,7 +75,19 @@ export default function HomePage() {
   function handleGo() {
     if (selected === null || going) return;
     setGoing(true);
-    setTimeout(() => router.push(routeForAge(selected)), 480);
+
+    // Iniciar sesión de analytics
+    const sessionId = crypto.randomUUID();
+    sessionStorage.setItem("joeySessionId", sessionId);
+    const playerName = localStorage.getItem("joeyPlayerName") || "Anónimo";
+    fetch("/api/analytics", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ event: "start", sessionId, playerName }),
+      keepalive: true,
+    }).catch(() => {});
+
+    setTimeout(() => router.push(routeForAge(selected!)), 480);
   }
 
   const joeyMood = going ? "excited" : step === "age" && selected ? "excited" : "happy";
@@ -187,6 +199,28 @@ export default function HomePage() {
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 h-1 rounded-b-3xl"
                   style={{ background:"linear-gradient(90deg,#e21b3c,#a855f7,#1368ce)" }}/>
+              </motion.button>
+
+              {/* Tarjeta — Runner */}
+              <motion.button
+                whileTap={{ scale:0.97 }} whileHover={{ scale:1.02 }}
+                onClick={() => router.push("/runner")}
+                className="w-full rounded-3xl p-5 text-left cursor-pointer relative overflow-hidden border border-orange-500/30"
+                style={{ background:"rgba(120,40,10,0.7)", backdropFilter:"blur(8px)",
+                  boxShadow:"0 8px 32px rgba(249,115,22,0.4), inset 0 1px 0 rgba(255,255,255,0.1)" }}>
+                <div className="flex items-center gap-4">
+                  <div className="text-5xl">🦘</div>
+                  <div>
+                    <p className="font-black text-2xl text-white"
+                      style={{ textShadow:"0 0 20px rgba(251,191,36,0.7)" }}>Joey Runner</p>
+                    <p className="font-bold text-sm mt-0.5" style={{ color:"rgba(255,210,150,0.7)" }}>
+                      5 etapas · Obstáculos · Ranking
+                    </p>
+                  </div>
+                  <span className="ml-auto text-2xl" style={{ color:"rgba(255,255,255,0.3)" }}>→</span>
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 h-1 rounded-b-3xl"
+                  style={{ background:"linear-gradient(90deg,#f97316,#fbbf24,#ef4444)" }}/>
               </motion.button>
             </motion.div>
           )}
