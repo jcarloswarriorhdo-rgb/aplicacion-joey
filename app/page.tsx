@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
+import { JoeyAnimated } from "@/components/JoeyAnimated";
 
 const AGES = [4,5,6,7,8,9,10,11,12,13,14,15];
 
@@ -138,16 +138,10 @@ export default function HomePage() {
       {/* ── Contenido ── */}
       <div className="relative z-10 flex flex-col items-center gap-6 w-full max-w-sm">
 
-        <motion.div animate={{ y: [0,-14,0] }} transition={{ duration:1.5, repeat:Infinity, ease:"easeInOut" }}>
-          <Image
-            src="/joey.png"
-            alt="Joey"
-            width={step === "menu" ? 220 : 180}
-            height={step === "menu" ? 280 : 230}
-            priority
-            style={{ objectFit:"contain", filter:"drop-shadow(0 0 28px rgba(168,85,247,0.45))" }}
-          />
-        </motion.div>
+        <JoeyAnimated
+          state={step === "age" && going ? "excited" : step === "menu" ? "idle" : "run"}
+          size={step === "menu" ? 200 : 160}
+        />
 
         <AnimatePresence mode="wait">
 
