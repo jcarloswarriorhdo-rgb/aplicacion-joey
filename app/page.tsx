@@ -222,6 +222,28 @@ export default function HomePage() {
                 <div className="absolute bottom-0 left-0 right-0 h-1 rounded-b-3xl"
                   style={{ background:"linear-gradient(90deg,#f97316,#fbbf24,#ef4444)" }}/>
               </motion.button>
+
+              {/* Tarjeta — Joey 3D */}
+              <motion.button
+                whileTap={{ scale:0.97 }} whileHover={{ scale:1.02 }}
+                onClick={() => router.push("/joey-3d")}
+                className="w-full rounded-3xl p-5 text-left cursor-pointer relative overflow-hidden border border-cyan-500/30"
+                style={{ background:"rgba(8,60,90,0.7)", backdropFilter:"blur(8px)",
+                  boxShadow:"0 8px 32px rgba(6,182,212,0.3), inset 0 1px 0 rgba(255,255,255,0.1)" }}>
+                <div className="flex items-center gap-4">
+                  <div className="text-5xl">🌀</div>
+                  <div>
+                    <p className="font-black text-2xl text-white"
+                      style={{ textShadow:"0 0 20px rgba(6,182,212,0.7)" }}>Joey 3D</p>
+                    <p className="font-bold text-sm mt-0.5" style={{ color:"rgba(150,230,255,0.65)" }}>
+                      Three.js · Animaciones 3D interactivas
+                    </p>
+                  </div>
+                  <span className="ml-auto text-2xl" style={{ color:"rgba(255,255,255,0.3)" }}>→</span>
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 h-1 rounded-b-3xl"
+                  style={{ background:"linear-gradient(90deg,#06b6d4,#8b5cf6,#3b82f6)" }}/>
+              </motion.button>
             </motion.div>
           )}
 
