@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Joey } from "@/components/Joey";
+import Image from "next/image";
 
 const AGES = [4,5,6,7,8,9,10,11,12,13,14,15];
 
@@ -90,7 +90,6 @@ export default function HomePage() {
     setTimeout(() => router.push(routeForAge(selected!)), 480);
   }
 
-  const joeyMood = going ? "excited" : step === "age" && selected ? "excited" : "happy";
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 overflow-hidden relative"
@@ -140,7 +139,14 @@ export default function HomePage() {
       <div className="relative z-10 flex flex-col items-center gap-6 w-full max-w-sm">
 
         <motion.div animate={{ y: [0,-14,0] }} transition={{ duration:1.5, repeat:Infinity, ease:"easeInOut" }}>
-          <Joey mood={joeyMood} size={step === "menu" ? 170 : 140}/>
+          <Image
+            src="/joey.png"
+            alt="Joey"
+            width={step === "menu" ? 220 : 180}
+            height={step === "menu" ? 280 : 230}
+            priority
+            style={{ objectFit:"contain", filter:"drop-shadow(0 0 28px rgba(168,85,247,0.45))" }}
+          />
         </motion.div>
 
         <AnimatePresence mode="wait">

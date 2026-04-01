@@ -3,6 +3,13 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
+// Preload Joey sprite
+let joeyImg: HTMLImageElement | null = null;
+if (typeof window !== "undefined") {
+  joeyImg = new window.Image();
+  joeyImg.src = "/joey.png";
+}
+
 // ─── Constants ───────────────────────────────────────────────────────────────
 const CW = 800, CH = 400;
 const GY = 318;          // ground surface y
@@ -103,74 +110,38 @@ function rr(ctx: CanvasRenderingContext2D, x:number, y:number, w:number, h:numbe
   ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
 }
 
+const KANG_H = 130; // sprite height in canvas px
+const KANG_W = 90;  // sprite width in canvas px
+
 function drawKang(ctx: CanvasRenderingContext2D, footY:number, legT:number, inAir:boolean, dead:boolean, rot:number) {
   ctx.save();
-  if (dead) { ctx.translate(KX, footY-55); ctx.rotate(rot); ctx.translate(-KX, -(footY-55)); }
 
-  // tail
-  ctx.beginPath(); ctx.moveTo(KX-6, footY-28);
-  ctx.quadraticCurveTo(KX-36, footY-10, KX-22, footY+2);
-  ctx.lineWidth = 9; ctx.strokeStyle = "#c26a20"; ctx.lineCap = "round"; ctx.stroke();
+  const cx = KX, cy = footY - KANG_H;
 
-  if (inAir) {
-    // tucked legs
-    ctx.fillStyle = "#d4894a";
-    rr(ctx, KX-2, footY-30, 28, 12, 5); ctx.fill();
-    ctx.fillStyle = "#a0522d";
-    rr(ctx, KX+2, footY-20, 26, 9, 4); ctx.fill();
+  if (dead) { ctx.translate(cx + KANG_W/2, cy + KANG_H/2); ctx.rotate(rot); ctx.translate(-(cx + KANG_W/2), -(cy + KANG_H/2)); }
+
+  // bounce/squash when running on ground
+  const scaleX = inAir ? 1 : 1 + Math.sin(legT * Math.PI * 4) * 0.04;
+  const scaleY = inAir ? 1 : 1 - Math.sin(legT * Math.PI * 4) * 0.04;
+
+  ctx.translate(cx + KANG_W/2, cy + KANG_H/2);
+  ctx.scale(scaleX, scaleY);
+  ctx.translate(-(cx + KANG_W/2), -(cy + KANG_H/2));
+
+  if (joeyImg?.complete && joeyImg.naturalWidth > 0) {
+    // use real Joey sprite
+    if (dead) ctx.globalAlpha = 0.7;
+    ctx.drawImage(joeyImg, cx - 10, cy - 10, KANG_W + 20, KANG_H + 20);
+    ctx.globalAlpha = 1;
   } else {
-    // running legs
-    const a = Math.sin(legT * Math.PI * 2) * 14;
-    const b = Math.sin(legT * Math.PI * 2 + Math.PI) * 14;
-    [[KX+3, a],[KX-5, b]].forEach(([lx, angle]) => {
-      ctx.save(); ctx.translate(lx as number, footY-22); ctx.rotate((angle as number)*0.05);
-      ctx.fillStyle = "#d4894a"; rr(ctx,0,0,13,22,5); ctx.fill();
-      ctx.fillStyle = "#a0522d"; rr(ctx,-4,20,22,9,4); ctx.fill();
-      ctx.restore();
-    });
+    // fallback: simple shape
+    ctx.fillStyle = "#f0a355";
+    rr(ctx, cx, cy, KANG_W, KANG_H, 20); ctx.fill();
+    ctx.fillStyle = "white"; ctx.font = "bold 28px system-ui"; ctx.textAlign = "center";
+    ctx.fillText("🦘", cx + KANG_W/2, cy + KANG_H/2 + 10);
   }
 
-  // body
-  const bg = ctx.createRadialGradient(KX,footY-58,4,KX,footY-58,30);
-  bg.addColorStop(0,"#f0a355"); bg.addColorStop(1,"#c26a20");
-  ctx.fillStyle = bg; rr(ctx,KX-18,footY-82,36,56,12); ctx.fill();
-  // belly
-  const belly = ctx.createRadialGradient(KX,footY-58,2,KX,footY-58,16);
-  belly.addColorStop(0,"#fde8cb"); belly.addColorStop(1,"#f0c080");
-  ctx.fillStyle = belly; rr(ctx,KX-10,footY-72,20,38,8); ctx.fill();
-  // arms
-  ctx.fillStyle = "#d4894a";
-  rr(ctx,KX+15,footY-74,10,18,4); ctx.fill();
-  rr(ctx,KX-25,footY-74,10,18,4); ctx.fill();
-
-  // head
-  const hg = ctx.createRadialGradient(KX+2,footY-97,4,KX+2,footY-97,22);
-  hg.addColorStop(0,"#f0a355"); hg.addColorStop(1,"#c26a20");
-  ctx.fillStyle = hg;
-  ctx.beginPath(); ctx.ellipse(KX+2,footY-97,20,22,0,0,Math.PI*2); ctx.fill();
-  // ears
-  [[-10,-0.3],[14,0.3]].forEach(([dx,tilt]) => {
-    ctx.fillStyle = "#c26a20";
-    ctx.beginPath(); ctx.ellipse(KX+(dx as number),footY-120,7,13,tilt as number,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle = "#ffd4a8";
-    ctx.beginPath(); ctx.ellipse(KX+(dx as number),footY-120,4,8,tilt as number,0,Math.PI*2); ctx.fill();
-  });
-  // eyes
-  [[-6,10]].forEach(([ox]) => {
-    [-6,10].forEach(ex => {
-      ctx.fillStyle = "#2d1600";
-      ctx.beginPath(); ctx.ellipse(KX+ex,footY-99,5,5,0,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle = "#fde8cb";
-      ctx.beginPath(); ctx.ellipse(KX+ex+1,footY-101,1.5,1.5,0,0,Math.PI*2); ctx.fill();
-    });
-    void ox;
-  });
-  // nose
-  ctx.fillStyle = "#a0522d";
-  ctx.beginPath(); ctx.ellipse(KX+2,footY-87,5,3.5,0,0,Math.PI*2); ctx.fill();
-  ctx.fillStyle = "#6b2e00";
-  ctx.beginPath(); ctx.ellipse(KX+2,footY-87,2.5,2,0,0,Math.PI*2); ctx.fill();
-
+  void inAir; void legT;
   ctx.restore();
 }
 
@@ -552,7 +523,7 @@ export default function RunnerPage() {
     background:"rgba(255,255,255,0.07)",borderRadius:14,
     padding:"12px 20px",width:"100%",maxWidth:400,
   };
-  const lbRow = (e: LBEntry, i: number, isMe: boolean): React.CSSProperties => ({
+  const lbRow = (_entry: LBEntry, i: number, isMe: boolean): React.CSSProperties => ({
     display:"flex",justifyContent:"space-between",fontSize:13,padding:"5px 6px",
     borderBottom:"1px solid rgba(255,255,255,0.08)",borderRadius:4,
     background: isMe ? "rgba(139,92,246,0.25)" : "transparent",
