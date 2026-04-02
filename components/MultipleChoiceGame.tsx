@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import { Joey } from "./Joey";
@@ -40,6 +40,21 @@ function shuffleOptions<T>(arr: T[], seed: number): T[] {
   return a;
 }
 
+function formatCategory(pathname: string): string {
+  const LABELS: Record<string, string> = {
+    kinder: "Kinder", primaria: "Primaria", secundaria: "Secundaria",
+    numeros: "Números", letras: "Letras", colores: "Colores",
+    palabras: "Palabras", ingles: "Inglés", matematicas: "Matemáticas",
+    geografia: "Geografía", espanol: "Español", algebra: "Álgebra",
+    historia: "Historia", ciencias: "Ciencias",
+  };
+  return pathname
+    .split("/")
+    .filter(Boolean)
+    .map(p => (!isNaN(Number(p)) ? `${p}°` : (LABELS[p] ?? p)))
+    .join(" › ");
+}
+
 export function MultipleChoiceGame({ title, emoji, bgFrom, bgTo, questions, backHref }: Props) {
   const [idx, setIdx]       = useState(0);
   const [score, setScore]   = useState(0);
@@ -48,6 +63,8 @@ export function MultipleChoiceGame({ title, emoji, bgFrom, bgTo, questions, back
   const [mood, setMood]     = useState<Mood>("happy");
   const [msgIdx, setMsgIdx] = useState(0);
   const [playerName, setPlayerName] = useState("");
+  const sessionIdRef = useRef("");
+  const startTimeRef = useRef(Date.now());
 
   // Mezcla las opciones de cada pregunta una sola vez (seed distinto por pregunta)
   const shuffledQuestions = useMemo(() =>
@@ -56,12 +73,28 @@ export function MultipleChoiceGame({ title, emoji, bgFrom, bgTo, questions, back
 
   useEffect(() => {
     setPlayerName(localStorage.getItem("joeyPlayerName") || "Campeón");
+    sessionIdRef.current = sessionStorage.getItem("joeySessionId") || "";
+    startTimeRef.current = Date.now();
   }, []);
 
   useEffect(() => {
     if (state === "complete") {
       playVictory();
       burst();
+      // Registrar juego completado
+      const sessionId = sessionIdRef.current;
+      if (sessionId) {
+        const playTime = Math.round((Date.now() - startTimeRef.current) / 1000);
+        const category = formatCategory(window.location.pathname);
+        fetch("/api/analytics", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ event: "game_complete", sessionId, category, playTime }),
+          keepalive: true,
+        }).catch(() => {});
+        // Reiniciar timer para próximo juego
+        startTimeRef.current = Date.now();
+      }
     }
   }, [state]);
 

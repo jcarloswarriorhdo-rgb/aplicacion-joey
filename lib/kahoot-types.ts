@@ -1,6 +1,9 @@
-export const ANSWER_COLORS = ['#ff4757', '#5352ed', '#ffa502', '#2ed573'] as const;
+// Coral · Cyan · Amber · Esmeralda
+export const ANSWER_COLORS = ['#ff4d6d', '#00c2d4', '#ffb703', '#06d6a0'] as const;
 export const ANSWER_SHAPES = ['▲', '◆', '●', '■'] as const;
 export const ANSWER_LABELS = ['A', 'B', 'C', 'D'] as const;
+
+export const KAHOOT_BG = "linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0fdf4 100%)";
 
 export interface KahootQuestion {
   text: string;

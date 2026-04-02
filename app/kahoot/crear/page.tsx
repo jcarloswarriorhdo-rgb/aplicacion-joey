@@ -75,19 +75,19 @@ export default function CrearKahoot() {
     finally { setLoading(false); }
   }
 
-  const COLORS = ["#e21b3c", "#1368ce", "#d89e00", "#26890c"];
+  const COLORS = ["#ff4d6d", "#00c2d4", "#ffb703", "#06d6a0"];
   const SHAPES = ["▲", "◆", "●", "■"];
 
   return (
     <div className="min-h-screen flex flex-col"
-      style={{ background: "linear-gradient(160deg,#46178f 0%,#7c3aed 100%)" }}>
+      style={{ background: "linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0fdf4 100%)" }}>
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 pt-5 pb-3">
         <button onClick={() => router.back()}
-          className="text-white/70 font-black text-2xl bg-transparent border-none cursor-pointer">←</button>
-        <h1 className="text-white font-black text-xl">✏️ Crear Kahoot</h1>
-        <span className="text-white/50 text-sm font-bold">{questions.length} preg.</span>
+          className="font-black text-2xl bg-transparent border-none cursor-pointer" style={{color:"#0d1b3e"}}>←</button>
+        <h1 className="font-black text-xl" style={{color:"#0d1b3e"}}>✏️ Crear Kahoot</h1>
+        <span className="text-sm font-bold text-gray-400">{questions.length} preg.</span>
       </div>
 
       {/* Tabs de preguntas */}
@@ -97,7 +97,7 @@ export default function CrearKahoot() {
             className="flex-shrink-0 w-9 h-9 rounded-full font-black text-sm cursor-pointer transition-all"
             style={{
               background: i === activeIdx ? "white" : "rgba(255,255,255,0.2)",
-              color: i === activeIdx ? "#46178f" : "white",
+              color: i === activeIdx ? "#00c2d4" : "white",
             }}>
             {i + 1}
           </button>
@@ -117,30 +117,32 @@ export default function CrearKahoot() {
 
           {/* Texto de la pregunta */}
           <div className="bg-white/10 rounded-2xl p-4">
-            <p className="text-white/70 font-bold text-xs mb-2 uppercase tracking-wide">Pregunta {activeIdx + 1}</p>
+            <p className="font-bold text-xs mb-2 uppercase tracking-wide text-gray-500">Pregunta {activeIdx + 1}</p>
             <textarea
               value={q.text}
               onChange={e => updateQ({ text: e.target.value })}
               placeholder="Escribe tu pregunta aquí..."
               rows={2}
-              className="w-full bg-transparent text-white font-bold text-lg placeholder-white/40 outline-none resize-none"
+              className="w-full bg-transparent font-bold text-lg outline-none resize-none"
+              style={{color:"#0d1b3e"}}
             />
           </div>
 
           {/* Imagen */}
           <div className="bg-white/10 rounded-2xl p-4">
-            <p className="text-white/70 font-bold text-xs mb-2 uppercase tracking-wide">Imagen (opcional)</p>
+            <p className="font-bold text-xs mb-2 uppercase tracking-wide text-gray-500">Imagen (opcional)</p>
             <div className="flex gap-2 items-center">
               <input
                 value={q.image || ""}
                 onChange={e => updateQ({ image: e.target.value })}
                 placeholder="Pega URL de imagen..."
-                className="flex-1 bg-white/20 rounded-xl px-3 py-2 text-white text-sm placeholder-white/40 outline-none"
+                className="flex-1 bg-white rounded-xl px-3 py-2 text-sm outline-none border border-gray-200"
+                style={{color:"#0d1b3e"}}
               />
               <button onClick={() => fileRef.current?.click()}
                 disabled={uploading}
-                className="px-3 py-2 rounded-xl font-bold text-sm cursor-pointer text-white"
-                style={{ background: "rgba(255,255,255,0.2)" }}>
+                className="px-3 py-2 rounded-xl font-bold text-sm cursor-pointer"
+                style={{ background: "#e0f2fe", color:"#0d1b3e" }}>
                 {uploading ? "⏳" : "📁"}
               </button>
               <input ref={fileRef} type="file" accept="image/*" className="hidden"
@@ -153,14 +155,14 @@ export default function CrearKahoot() {
 
           {/* Tiempo */}
           <div className="bg-white/10 rounded-2xl p-4">
-            <p className="text-white/70 font-bold text-xs mb-2 uppercase tracking-wide">⏱ Tiempo</p>
+            <p className="font-bold text-xs mb-2 uppercase tracking-wide text-gray-500">⏱ Tiempo</p>
             <div className="flex gap-2">
               {TIME_OPTIONS.map(t => (
                 <button key={t} onClick={() => updateQ({ timeLimit: t })}
                   className="flex-1 py-2 rounded-xl font-black text-sm cursor-pointer transition-all"
                   style={{
                     background: q.timeLimit === t ? "white" : "rgba(255,255,255,0.2)",
-                    color: q.timeLimit === t ? "#46178f" : "white",
+                    color: q.timeLimit === t ? "#00c2d4" : "white",
                   }}>
                   {t}s
                 </button>
@@ -197,7 +199,7 @@ export default function CrearKahoot() {
           {/* Botón eliminar pregunta */}
           {questions.length > 1 && (
             <button onClick={() => removeQuestion(activeIdx)}
-              className="text-white/40 font-bold text-sm underline bg-transparent border-none cursor-pointer text-center">
+              className="text-gray-400 font-bold text-sm underline bg-transparent border-none cursor-pointer text-center">
               🗑 Eliminar esta pregunta
             </button>
           )}
@@ -206,13 +208,13 @@ export default function CrearKahoot() {
 
       {/* Footer */}
       <div className="sticky bottom-0 p-4 pt-2"
-        style={{ background: "linear-gradient(to top, #46178f, transparent)" }}>
+        style={{ background: "linear-gradient(to top, #e0f2fe, transparent)" }}>
         <motion.button
           whileTap={{ scale: 0.97 }}
           onClick={handleCreate}
           disabled={loading}
           className="w-full py-5 rounded-2xl font-black text-xl text-white shadow-2xl cursor-pointer"
-          style={{ background: loading ? "rgba(255,255,255,0.3)" : "#e21b3c" }}>
+          style={{ background: loading ? "rgba(255,255,255,0.3)" : "#ff4d6d" }}>
           {loading ? "Creando juego..." : `🚀 ¡Crear juego! (${questions.length} preguntas)`}
         </motion.button>
       </div>

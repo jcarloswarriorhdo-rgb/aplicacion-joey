@@ -40,7 +40,7 @@ export default function UnirsePage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6"
-      style={{ background: "linear-gradient(160deg,#46178f 0%,#7c3aed 100%)" }}>
+      style={{ background: "linear-gradient(135deg,#0a0e27 0%,#0d1b3e 55%,#0a2a3d 100%)" }}>
       <div className="w-full max-w-sm flex flex-col items-center gap-6">
 
         <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}>
@@ -61,13 +61,13 @@ export default function UnirsePage() {
               maxLength={6}
               autoFocus
               className="w-full text-center font-black text-4xl tracking-[0.2em] rounded-2xl px-4 py-5 outline-none shadow-xl"
-              style={{ color: "#46178f", letterSpacing: "0.25em" }}
+              style={{ color: "#0d1b3e", letterSpacing: "0.25em" }}
             />
             <motion.button whileTap={{ scale: 0.97 }}
               onClick={() => { setError(""); setStep("name"); setTimeout(() => nameRef.current?.focus(), 100); }}
               disabled={pin.length !== 6}
               className="w-full py-5 rounded-2xl font-black text-xl text-white cursor-pointer"
-              style={{ background: pin.length === 6 ? "#e21b3c" : "rgba(255,255,255,0.2)" }}>
+              style={{ background: pin.length === 6 ? "#ff4d6d" : "rgba(255,255,255,0.2)" }}>
               Continuar →
             </motion.button>
           </motion.div>
@@ -86,7 +86,7 @@ export default function UnirsePage() {
               placeholder="Tu nombre o apodo"
               maxLength={20}
               className="w-full text-center font-black text-2xl rounded-2xl px-4 py-5 outline-none shadow-xl"
-              style={{ color: "#46178f" }}
+              style={{ color: "#0d1b3e" }}
             />
             {error && (
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}
@@ -98,7 +98,7 @@ export default function UnirsePage() {
               onClick={handleJoin}
               disabled={!name.trim() || loading}
               className="w-full py-5 rounded-2xl font-black text-xl text-white cursor-pointer"
-              style={{ background: name.trim() && !loading ? "#26890c" : "rgba(255,255,255,0.2)" }}>
+              style={{ background: name.trim() && !loading ? "#06d6a0" : "rgba(255,255,255,0.2)" }}>
               {loading ? "Uniéndose..." : "🎮 ¡Entrar!"}
             </motion.button>
             <button onClick={() => { setStep("pin"); setError(""); }}
