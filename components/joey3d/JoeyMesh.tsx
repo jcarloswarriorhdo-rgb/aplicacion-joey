@@ -158,8 +158,8 @@ export function JoeyMesh({ state = "idle", speed = 1 }: Props) {
   return (
     <>
       {/* Ground shadow */}
-      <mesh ref={shadowRef} rotation={[-Math.PI/2, 0, 0]} position={[0, -1.18, 0]}>
-        <ellipseGeometry args={[0.55, 0.28, 32]}/>
+      <mesh ref={shadowRef} rotation={[-Math.PI/2, 0, 0]} position={[0, -1.18, 0]} scale={[1, 0.5, 1]}>
+        <circleGeometry args={[0.55, 32]}/>
         <primitive object={mat.shadow}/>
       </mesh>
 
